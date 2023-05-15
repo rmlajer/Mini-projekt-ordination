@@ -105,4 +105,5 @@ app.MapPost("/api/patienter/{id}/beregnAnbefaletDosisPerDøgn", (DataService ser
     return Results.Ok(response);
 });
 
+
 app.Run();
