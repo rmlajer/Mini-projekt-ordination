@@ -182,7 +182,7 @@ public class DataService
             return "Ordination anvendt.";
         }
         else return "Ordination ikke anvendt.";
-        
+
     }
 
     /// <summary>
