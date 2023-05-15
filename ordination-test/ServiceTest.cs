@@ -71,6 +71,7 @@ public class ServiceTest
     }
 
     [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
     public void OpretDagligFastPatientIdFindesIkke()
     {
         Patient patient = service.GetPatienter().First();
@@ -78,13 +79,13 @@ public class ServiceTest
 
         try
         {
-            service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
+            service.OpretDagligFast(10, lm.LaegemiddelId,
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
-            Assert.Fail();
         }
-        catch(ArgumentNullException)
+        catch(InvalidOperationException)
         {
-            Console.WriteLine("kan ikke oprette daglig fast - patient findes ikke");
+            
+            throw new ArgumentNullException("kan ikke oprette daglig fast - patient findes ikke");
         }
 
     }
