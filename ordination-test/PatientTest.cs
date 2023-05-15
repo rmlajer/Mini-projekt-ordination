@@ -32,6 +32,7 @@ public class PatientTest
         try { Assert.AreEqual("Egon", patient.navn); }
         catch(Exception) { Console.WriteLine("Assert.AreEqual failed correctly"); }
         */
-        
+        Assert.AreEqual("Egon", patient.navn);
+
     }
 }
