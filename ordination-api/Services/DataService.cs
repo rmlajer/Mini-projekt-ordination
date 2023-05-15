@@ -146,7 +146,8 @@ public class DataService
     {
 
         PN addPN = new PN(startDato, slutDato, antal, GetLaegemiddel(laegemiddelId));
-        db.Ordinationer.Add(addPN);
+        Patient p = db.Patienter.First(p => p.PatientId == patientId);
+        p.ordinationer.Add(addPN);
         db.SaveChanges();
 
         return addPN!;
@@ -158,7 +159,8 @@ public class DataService
     {
 
         DagligFast addDagligFast = new DagligFast(startDato, slutDato, GetLaegemiddel(laegemiddelId), antalMorgen, antalMiddag, antalAften, antalNat);
-        db.Ordinationer.Add(addDagligFast);
+        Patient p = db.Patienter.First(p => p.PatientId == patientId);
+        p.ordinationer.Add(addDagligFast);
         db.SaveChanges();
         return addDagligFast!;
     }
@@ -166,7 +168,8 @@ public class DataService
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
         DagligSkæv addDagligSkæv = new DagligSkæv(startDato, slutDato, GetLaegemiddel(laegemiddelId), doser);
-        db.Ordinationer.Add(addDagligSkæv);
+        Patient p = db.Patienter.First(p => p.PatientId == patientId);
+        p.ordinationer.Add(addDagligSkæv);
         db.SaveChanges();
         return addDagligSkæv!;
 
