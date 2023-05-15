@@ -160,9 +160,16 @@ public class DataService
 
         DagligFast addDagligFast = new DagligFast(startDato, slutDato, GetLaegemiddel(laegemiddelId), antalMorgen, antalMiddag, antalAften, antalNat);
         Patient p = db.Patienter.First(p => p.PatientId == patientId);
-        p.ordinationer.Add(addDagligFast);
-        db.SaveChanges();
-        return addDagligFast!;
+        if (p == null)
+        {
+            throw new ArgumentNullException();
+        }
+        else
+        {
+            p.ordinationer.Add(addDagligFast);
+            db.SaveChanges();
+            return addDagligFast!;
+        }
     }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)

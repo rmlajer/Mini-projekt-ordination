@@ -71,6 +71,25 @@ public class ServiceTest
     }
 
     [TestMethod]
+    public void OpretDagligFastPatientIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        try
+        {
+            service.OpretDagligFast(patient.PatientId, lm.LaegemiddelId,
+            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+            Assert.Fail();
+        }
+        catch(ArgumentNullException)
+        {
+            Console.WriteLine("kan ikke oprette daglig fast - patient findes ikke");
+        }
+
+    }
+
+    [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
     public void TestAtKodenSmiderEnException()
     {

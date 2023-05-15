@@ -27,7 +27,6 @@ public class PatientTest
         double vægt = 83;
 
         Patient patient = new Patient(cpr, navn, vægt);
-
         /* Hvis den gerne må fejle pænt
         try { Assert.AreEqual("Egon", patient.navn); }
         catch(Exception) { Console.WriteLine("Assert.AreEqual failed correctly"); }
