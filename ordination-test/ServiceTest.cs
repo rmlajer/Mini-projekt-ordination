@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Service;
 using Data;
 using shared.Model;
+using static shared.Util;
 
 [TestClass]
 public class ServiceTest
@@ -39,6 +40,34 @@ public class ServiceTest
             2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
 
         Assert.AreEqual(2, service.GetDagligFaste().Count());
+    }
+
+    [TestMethod]
+    public void OpretDagligSkaev()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(1, service.GetDagligSkæve().Count());
+
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(patient.PatientId, lm.LaegemiddelId, doser, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(2, service.GetDagligSkæve().Count());
+    }
+
+
+    [TestMethod]
+    public void OpretPN()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+
+        Assert.AreEqual(4, service.GetPNs().Count());
+
+        service.OpretPN(patient.PatientId, lm.LaegemiddelId, 2, DateTime.Now, DateTime.Now.AddDays(3));
+
+        Assert.AreEqual(5, service.GetPNs().Count());
     }
 
     [TestMethod]
