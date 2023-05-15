@@ -76,6 +76,7 @@ public class ServiceTest
     {
         // Herunder skal man så kalde noget kode,
         // der smider en exception.
+        throw new ArgumentNullException("Der er sket en fejl");
 
         // Hvis koden _ikke_ smider en exception,
         // så fejler testen.
