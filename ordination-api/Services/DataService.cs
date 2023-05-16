@@ -157,15 +157,40 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat,
         DateTime startDato, DateTime slutDato)
     {
+        if (patientId < 0 || laegemiddelId < 0)
+        {
+            throw new InvalidOperationException("Id kan ikke være et negativt integer");
+            return null;
+        }
+        else
+        {
+            Patient p;
+            Laegemiddel lm;
 
-        DagligFast addDagligFast = new DagligFast(startDato, slutDato, GetLaegemiddel(laegemiddelId), antalMorgen, antalMiddag, antalAften, antalNat);
-        Patient p;
-        try { p = db.Patienter.First(p => p.PatientId == patientId); }
-        catch (ArgumentNullException) { throw new ArgumentNullException(); }
+            try
+            {
+                lm = db.Laegemiddler.First(lm => lm.LaegemiddelId == laegemiddelId);
+            }
 
-        p.ordinationer.Add(addDagligFast);
-        db.SaveChanges();
-        return addDagligFast!;
+            catch
+            {
+                throw new InvalidOperationException("lægemiddel findes ikke");
+            }
+
+            try
+            {
+                p = db.Patienter.First(p => p.PatientId == patientId);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException("patient findes ikke");
+            }
+
+            DagligFast addDagligFast = new DagligFast(startDato, slutDato, lm, antalMorgen, antalMiddag, antalAften, antalNat);
+            p.ordinationer.Add(addDagligFast);
+            db.SaveChanges();
+            return addDagligFast!;
+        }
 
     }
 

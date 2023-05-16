@@ -71,24 +71,45 @@ public class ServiceTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
+    [ExpectedException(typeof(InvalidOperationException))]
     public void OpretDagligFastPatientIdFindesIkke()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
-
-        try
-        {
-            service.OpretDagligFast(10, lm.LaegemiddelId,
-            2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
-        }
-        catch(InvalidOperationException)
-        {
-            
-            throw new ArgumentNullException("kan ikke oprette daglig fast - patient findes ikke");
-        }
-
+        service.OpretDagligFast(10, lm.LaegemiddelId, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da patient id ikke findes");
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligFastLædemiddelIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretDagligFast(patient.PatientId, 8, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da lægemiddel id ikke findes");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligFastPatientIdNegativ()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretDagligFast(-1,lm.LaegemiddelId, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da patient id er negativ");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligFastLægemiddelIdNegativ()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretDagligFast(patient.PatientId, -1, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da lægemiddel id er negativ");
+    }
+
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentNullException))]
