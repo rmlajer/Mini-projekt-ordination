@@ -56,6 +56,58 @@ public class ServiceTest
         Assert.AreEqual(2, service.GetDagligSkæve().Count());
     }
 
+    //TEST AF DAGLIG SKÆV//
+
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkævPatientIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(10, lm.LaegemiddelId, doser, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da patient id ikke findes");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkævLægemiddelIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(patient.PatientId, 10, doser, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da lægemiddel id ikke findes");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkævPatientIdNegativ()
+    {
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(-1, 1,doser, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da patient id er negativ");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkævLægemiddelIdNegativ()
+    {
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(1, -1, doser, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da lægemiddel id er negativ");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkævDoserTom()
+    {
+        Dosis[] doser = new Dosis[] {};
+        service.OpretDagligSkaev(1, 1, doser, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da doser er tom");
+    }
+
 
     //TEST AF PN//
 
@@ -72,8 +124,6 @@ public class ServiceTest
         Assert.AreEqual(5, service.GetPNs().Count());
     }
 
-
-   
 
     [TestMethod]
     [ExpectedException(typeof(InvalidOperationException))]

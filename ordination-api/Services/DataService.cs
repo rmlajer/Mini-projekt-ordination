@@ -225,12 +225,40 @@ public class DataService
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
-        DagligSkæv addDagligSkæv = new DagligSkæv(startDato, slutDato, GetLaegemiddel(laegemiddelId), doser);
-        Patient p = db.Patienter.First(p => p.PatientId == patientId);
-        p.ordinationer.Add(addDagligSkæv);
-        db.SaveChanges();
-        return addDagligSkæv!;
+        if (patientId < 0 || laegemiddelId < 0 || doser.Length == 0)
+        {
+            throw new InvalidOperationException("Id kan ikke være et negativt integer");
+            return null;
+        }
+        else
+        {
+            Patient p;
+            Laegemiddel lm;
 
+            try
+            {
+                lm = db.Laegemiddler.First(lm => lm.LaegemiddelId == laegemiddelId);
+            }
+
+            catch
+            {
+                throw new InvalidOperationException("lægemiddel findes ikke");
+            }
+
+            try
+            {
+                p = db.Patienter.First(p => p.PatientId == patientId);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException("patient findes ikke");
+            }
+            DagligSkæv addDagligSkæv = new DagligSkæv(startDato, slutDato, GetLaegemiddel(laegemiddelId), doser);
+            p.ordinationer.Add(addDagligSkæv);
+            db.SaveChanges();
+            return addDagligSkæv!;
+
+        }
     }
 
     public string AnvendOrdination(int id, Dato dato)
