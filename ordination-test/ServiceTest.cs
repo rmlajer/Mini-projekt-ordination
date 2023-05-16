@@ -57,6 +57,8 @@ public class ServiceTest
     }
 
 
+    //TEST AF PN//
+
     [TestMethod]
     public void OpretPN()
     {
@@ -70,6 +72,58 @@ public class ServiceTest
         Assert.AreEqual(5, service.GetPNs().Count());
     }
 
+
+   
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNPatientIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretPN(50, lm.LaegemiddelId,2, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af PN fejlet korrekt, da patient id ikke findes");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNLægemiddelIdFindesIkke()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretPN(patient.PatientId, 50, 2, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af PN fejlet korrekt, da lægemiddel id ikke findes");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNPatientIdNegativ()
+    {
+        service.OpretPN(-1, 1, 2, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af PN fejlet korrekt, da patient id er negativ");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNLægemiddelIdNegativ()
+    {
+        service.OpretPN(1, -1, 2, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af PN fejlet korrekt, da lægemiddel id er negativ");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNAntalNegativ()
+    {
+        service.OpretPN(1, 1, -1, DateTime.Now, DateTime.Now.AddDays(3));
+        Console.WriteLine("oprettelse af PN fejlet korrekt, da antal er negativ");
+    }
+
+
+
+    //DAGLIG FAST TESTMETODER//
+
+
     [TestMethod]
     [ExpectedException(typeof(InvalidOperationException))]
     public void OpretDagligFastPatientIdFindesIkke()
@@ -82,7 +136,7 @@ public class ServiceTest
 
     [TestMethod]
     [ExpectedException(typeof(InvalidOperationException))]
-    public void OpretDagligFastLædemiddelIdFindesIkke()
+    public void OpretDagligFastLægemiddelIdFindesIkke()
     {
         Patient patient = service.GetPatienter().First();
         Laegemiddel lm = service.GetLaegemidler().First();
@@ -109,6 +163,9 @@ public class ServiceTest
         service.OpretDagligFast(patient.PatientId, -1, 2, 2, 1, 0, DateTime.Now, DateTime.Now.AddDays(3));
         Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da lægemiddel id er negativ");
     }
+
+
+
 
 
     [TestMethod]

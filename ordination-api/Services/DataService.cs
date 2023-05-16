@@ -145,12 +145,41 @@ public class DataService
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
     {
 
-        PN addPN = new PN(startDato, slutDato, antal, GetLaegemiddel(laegemiddelId));
-        Patient p = db.Patienter.First(p => p.PatientId == patientId);
-        p.ordinationer.Add(addPN);
-        db.SaveChanges();
+        if (patientId < 0 || laegemiddelId < 0 || antal<0)
+        {
+            throw new InvalidOperationException("Id kan ikke være et negativt integer");
+            return null;
+        }
+        else
+        {
+            Patient p;
+            Laegemiddel lm;
 
-        return addPN!;
+            try
+            {
+                lm = db.Laegemiddler.First(lm => lm.LaegemiddelId == laegemiddelId);
+            }
+
+            catch
+            {
+                throw new InvalidOperationException("lægemiddel findes ikke");
+            }
+
+            try
+            {
+                p = db.Patienter.First(p => p.PatientId == patientId);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new InvalidOperationException("patient findes ikke");
+            }
+
+            PN addPN = new PN(startDato, slutDato, antal, GetLaegemiddel(laegemiddelId));
+            p.ordinationer.Add(addPN);
+            db.SaveChanges();
+
+            return addPN!;
+        }
     }
 
     public DagligFast OpretDagligFast(int patientId, int laegemiddelId,
