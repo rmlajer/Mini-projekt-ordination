@@ -145,7 +145,7 @@ public class DataService
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
     {
 
-        if (patientId < 0 || laegemiddelId < 0 || antal<0)
+        if (patientId < 0 || laegemiddelId < 0 || antal<0 || startDato > slutDato)
         {
             throw new InvalidOperationException("Id kan ikke være et negativt integer");
             return null;
@@ -186,7 +186,7 @@ public class DataService
         double antalMorgen, double antalMiddag, double antalAften, double antalNat,
         DateTime startDato, DateTime slutDato)
     {
-        if (patientId < 0 || laegemiddelId < 0)
+        if (patientId < 0 || laegemiddelId < 0 || startDato > slutDato)
         {
             throw new InvalidOperationException("Id kan ikke være et negativt integer");
             return null;
@@ -225,7 +225,7 @@ public class DataService
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser, DateTime startDato, DateTime slutDato)
     {
-        if (patientId < 0 || laegemiddelId < 0 || doser.Length == 0)
+        if (patientId < 0 || laegemiddelId < 0 || doser.Length == 0 || startDato > slutDato)
         {
             throw new InvalidOperationException("Id kan ikke være et negativt integer");
             return null;

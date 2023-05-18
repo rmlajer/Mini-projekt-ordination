@@ -108,10 +108,19 @@ public class ServiceTest
         Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, da doser er tom");
     }
 
-
-    //TEST AF PN//
-
     [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligSkaevstartDatostørreendslutDato()
+    {
+        Dosis[] doser = new Dosis[] { new Dosis(CreateTimeOnly(12, 0, 0), 2) };
+        service.OpretDagligSkaev(1, -1, doser, DateTime.Now.AddDays(3), DateTime.Now);
+        Console.WriteLine("oprettelse af daglig skæv fejlet korrekt, startDato kan ikke være større end slutDato");
+    }
+
+
+        //TEST AF PN//
+
+        [TestMethod]
     public void OpretPN()
     {
         Patient patient = service.GetPatienter().First();
@@ -169,6 +178,15 @@ public class ServiceTest
         Console.WriteLine("oprettelse af PN fejlet korrekt, da antal er negativ");
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretPNstartDatostørreendslutDato()
+    {
+        service.OpretPN(1, 1, 1, DateTime.Now.AddDays(3), DateTime.Now);
+        
+        Console.WriteLine("oprettelse af PN fejlet korrekt, startDato kan ikke være større end slutDato");
+    }
+
 
 
     //DAGLIG FAST TESTMETODER//
@@ -214,6 +232,15 @@ public class ServiceTest
         Console.WriteLine("oprettelse af daglig fast fejlet korrekt, da lægemiddel id er negativ");
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    public void OpretDagligFaststartDatostørreendslutDato()
+    {
+        Patient patient = service.GetPatienter().First();
+        Laegemiddel lm = service.GetLaegemidler().First();
+        service.OpretDagligFast(patient.PatientId, -1, 2, 2, 1, 0, DateTime.Now.AddDays(3), DateTime.Now);
+        Console.WriteLine("oprettelse af daglig fast fejlet korrekt, startDato kan ikke være større end slutDato");
+    }
 
 
 
